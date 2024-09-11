@@ -1,22 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 type Position = { x: number; y: number };
+
+const DEFAULT_SPEED = 200;
 
 const SnakeGame: React.FC = () => {
   const [snake, setSnake] = useState<Position[]>([{ x: 10, y: 10 }]);
   const [food, setFood] = useState<Position>({ x: 20, y: 20 });
   const [direction, setDirection] = useState<Position>({ x: 1, y: 0 });
-  const [speed, setSpeed] = useState(200);
+  const [speed, setSpeed] = useState(DEFAULT_SPEED);
   const gridSize = 20;
   const boardSize = 800;
   const gridCount = Math.floor(boardSize / gridSize);
 
-  const getRandomPosition = () => {
+  const getRandomPosition = useCallback(() => {
     return {
       x: Math.floor(Math.random() * gridCount),
       y: Math.floor(Math.random() * gridCount),
     };
-  };
+  }, [gridCount]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -56,6 +58,7 @@ const SnakeGame: React.FC = () => {
           head.y >= gridCount
         ) {
           // alert("Game Over");
+          setSpeed(DEFAULT_SPEED);
           return [{ x: 10, y: 10 }]; // Reset the game
         }
 
@@ -78,7 +81,7 @@ const SnakeGame: React.FC = () => {
 
     const gameInterval = setInterval(moveSnake, speed);
     return () => clearInterval(gameInterval);
-  }, [direction, food]);
+  }, [direction, food, getRandomPosition, gridCount, speed]);
 
   return (
     <div
