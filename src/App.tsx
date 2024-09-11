@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import Tomato from "./assets/tomato.jpg";
 
 type Position = { x: number; y: number };
 
@@ -114,7 +115,8 @@ const SnakeGame: React.FC = () => {
             }}
           />
         ))}
-        <div
+        <img
+          src={Tomato}
           style={{
             position: "absolute",
             left: `${food.x * gridSize}px`,
